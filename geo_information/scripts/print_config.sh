@@ -4,12 +4,12 @@
 # load configuration
 . ./scripts/config.inc.sh
 
-
-
   echo
   echo "**********************************"
   echo "********* TSUNAMI CONFIG *********"
   echo "**********************************"
+
+  echo "  git version: $(git rev-parse HEAD)"
 
   echo "  WRITEDATATO=$WRITEDATATO"
   echo "  WRITETOASCII=$WRITETOASCII"
