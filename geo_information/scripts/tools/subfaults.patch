@@ -1,0 +1,17 @@
+diff --git a/sources/subfaults.py b/sources/subfaults.py
+index a38c466..051f911 100644
+--- a/sources/subfaults.py
++++ b/sources/subfaults.py
+@@ -61,9 +61,9 @@ def read_subfault_model(fname):
+     fm.dip = reshape(data[:,6],arrayshape)
+ 
+     # format used by UCSB:
+-    fm.rupture_initial_time = reshape(data[:,7],arrayshape)
+-    fm.rise_time_starting = reshape(data[:,8],arrayshape)
+-    fm.rise_time_ending = reshape(data[:,9],arrayshape)
++    #fm.rupture_initial_time = reshape(data[:,7],arrayshape)
++    #fm.rise_time_starting = reshape(data[:,8],arrayshape)
++    #fm.rise_time_ending = reshape(data[:,9],arrayshape)
+ 
+     fm.fault_bdry = fault_bdry
+     
