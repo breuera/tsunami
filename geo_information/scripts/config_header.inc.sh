@@ -13,12 +13,7 @@
   #https://www.bodc.ac.uk/data/online_delivery/gebco/
   ETOPO1=data/grids/ETOPO1_Ice_g_gmt4.grd
   GEBCO=data/grids/gebco_08.nc
-  
-  #set global grid resolution, GEBCO: 30s, ETOPO1: 1m
-  # NEW: seconds are specified with 's', but 'c'
-  GLOBALGRIDRESOLUTION=30c
-  
-  GRIDFILE=$GEBCO
+
   
   #where to write grids/poi/log?
   WRITEDATATO=output

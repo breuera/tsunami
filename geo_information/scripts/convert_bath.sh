@@ -65,9 +65,9 @@ echo -e "*****************************"
   $GMTPREFIX pstext $DARTSTATIONSFILE -R"$PLOTREGION" -J"$PLOTPROJECTION" -X.4c -D0/.25c -O -V >> "$PLOTDIR"/"$METANAME"_overview.ps || exit 1
 
   #extract bathymetry data in the specified region
-  echo $GMTPREFIX grdcut $GRIDFILE -R$REGION -G$TEMPDIR/bath.nc
+  echo $GMTPREFIX grdcut $GRIDFILE -R$REGION_WORK -G$TEMPDIR/bath.nc
   if [ ! -e $TEMPDIR/bath.nc ]; then
-	$GMTPREFIX grdcut $GRIDFILE -R$REGION -G$TEMPDIR/bath.nc || exit 1
+	$GMTPREFIX grdcut $GRIDFILE -R$REGION_WORK -G$TEMPDIR/bath.nc || exit 1
   fi
 
   echo $GMTPREFIX grdinfo -L2 $TEMPDIR/bath.nc
@@ -87,20 +87,20 @@ echo -e "*****************************"
 
   if [ "$PROJECTIONTYPE" = "cylindrical" ]; then
     echo "*** cylindrical projection"
-    echo $GMTPREFIX grdproject $TEMPDIR/bath.nc -J$PROJECTION -G"$TEMPDIR"/bath2.nc -A -V2
-    $GMTPREFIX grdproject $TEMPDIR/bath.nc -J$PROJECTION -G"$TEMPDIR"/bath2.nc -A -V2 || exit 1
+    echo $GMTPREFIX grdproject $TEMPDIR/bath.nc -J$PROJECTION -C -G"$TEMPDIR"/bath2.nc -A -V2
+    $GMTPREFIX grdproject $TEMPDIR/bath.nc -J$PROJECTION -C -G"$TEMPDIR"/bath2.nc -A -V2 || exit 1
 
-    echo $GMTPREFIX grdsample $TEMPDIR/bath2.nc -I$GRIDSPACING -G"$WRITEDATATO/$METANAME"_bath.nc
-    $GMTPREFIX grdsample $TEMPDIR/bath2.nc -I$GRIDSPACING -G"$WRITEDATATO/$METANAME"_bath.nc || exit 1
+    echo $GMTPREFIX grdsample $TEMPDIR/bath2.nc -I$GRIDSPACING -R$REGION_CUT -G"$WRITEDATATO/$METANAME"_bath.nc
+    $GMTPREFIX grdsample $TEMPDIR/bath2.nc -I$GRIDSPACING -R$REGION_CUT -G"$WRITEDATATO/$METANAME"_bath.nc || exit 1
 
   elif [ "$PROJECTIONTYPE" = "spherical" ]; then
     echo "*** spherical projection"
-    echo $GMTPREFIX grdproject $TEMPDIR/bath.nc -R$REGION -J$PROJECTION -C -A -G"$TEMPDIR"/bath2.nc -V2
+    echo $GMTPREFIX grdproject $TEMPDIR/bath.nc -R$REGION_WORK -J$PROJECTION -C -A -G"$TEMPDIR"/bath2.nc -V2
     if [ ! -e $TEMPDIR/bath2.nc ]; then
-      $GMTPREFIX grdproject $TEMPDIR/bath.nc -R$REGION -J$PROJECTION -C -A -G"$TEMPDIR"/bath2.nc -V2 || exit 1
+      $GMTPREFIX grdproject $TEMPDIR/bath.nc -R$REGION_WORK -J$PROJECTION -C -A -G"$TEMPDIR"/bath2.nc -V2 || exit 1
     fi
 
-    echo $GMTPREFIX grdsample $TEMPDIR/bath2.nc -R$REGION -I$GRIDSPACING -R$BATHREGIONSPH -G"$WRITEDATATO/$METANAME"_bath.nc
+    echo $GMTPREFIX grdsample $TEMPDIR/bath2.nc -R$REGION_WORK -I$GRIDSPACING -R$BATHREGIONSPH -G"$WRITEDATATO/$METANAME"_bath.nc
     #$GMTPREFIX grdsample $TEMPDIR/bath2.nc -R$REGION -I$GRIDSPACING -R$BATHREGIONSPH -G"$WRITEDATATO/$METANAME"_bath.nc || exit 1
     if [ ! -e "$WRITEDATATO/$METANAME"_bath.nc ]; then
       $GMTPREFIX grdsample $TEMPDIR/bath2.nc -I$GRIDSPACING -R$BATHREGIONSPH -G"$WRITEDATATO/$METANAME"_bath.nc || exit 1
@@ -109,5 +109,10 @@ echo -e "*****************************"
   else
     echo -e "\n *** WARNING: Selected projection is not valid; select either \"cylindrical\" or \"spherical\."
   fi
+
+  #echo "*** cutting target region ***"
+  #if [ "$REGION_CUT" != "" ]; then
+  #  $GMTPREFIX grcut -R$REGION_CUT -G"$WRITEDATATO/$METANAME"_bath.nc
+  #fi
 
   $GMTPREFIX grdinfo -L2 "$WRITEDATATO/$METANAME"_bath.nc

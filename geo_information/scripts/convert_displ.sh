@@ -52,15 +52,14 @@ echo -e "*****************************"
   #   -N select the number of grid nodes (implicit: grid spacing)
 
   if [ "$PROJECTIONTYPE" = "cylindrical" ]; then
-    $GMTPREFIX mapproject $DARTSTATIONSFILE -R$REGION -J$PROJECTION -F -V >"$WRITEDATATO/$METANAME"_poi.txt
+    $GMTPREFIX mapproject $DARTSTATIONSFILE -R$REGION_WORK -J$PROJECTION -C -F -V >"$WRITEDATATO/$METANAME"_poi.txt
 
-    $GMTPREFIX grdproject $TEMPDIR/displ.nc -J$PROJECTION -G"$TEMPDIR"/displ2.nc -A -V2
-    $GMTPREFIX grdsample $TEMPDIR/displ2.nc -I$GRIDSPACING -G"$TEMPDIR"/displ3.nc
+    $GMTPREFIX grdproject $TEMPDIR/displ.nc -J$PROJECTION -C -G"$TEMPDIR"/displ2.nc -A -V2
+    $GMTPREFIX grdsample $TEMPDIR/displ2.nc -I$GRIDSPACING -R$REGION_CUT -G"$TEMPDIR"/displ3.nc
   elif [ "$PROJECTIONTYPE" = "spherical" ]; then
     $GMTPREFIX mapproject $DARTSTATIONSFILE -J$PROJECTION -C -F -R0/360/0/90 >"$WRITEDATATO/$METANAME"_poi.txt
 
-    $GMTPREFIX grdproject $TEMPDIR/displ.nc -R$REGION -J$PROJECTION -C -A -G"$TEMPDIR"/displ2.nc -V2
-    #$GMTPREFIX grdsample $TEMPDIR/displ2.nc -R$REGION -I$GRIDSPACING -R$DISPLREGIONSPH -G"$TEMPDIR"/displ3.nc
+    $GMTPREFIX grdproject $TEMPDIR/displ.nc -R$REGION_WORK -J$PROJECTION -C -A -G"$TEMPDIR"/displ2.nc -V2
     $GMTPREFIX grdsample $TEMPDIR/displ2.nc -I$GRIDSPACING -R$DISPLREGIONSPH -G"$TEMPDIR"/displ3.nc
   else
     echo -e "\n *** WARNING: Selected projection is not valid; select either \"cylindrical\" or \"spherical\."

@@ -56,7 +56,7 @@
   #   -I grid spacing
   #   -N value for undefined triples
   #   -r use pixel registration (TODO: GEBCO ONLY? )
-  CMD="$GMTPREFIX xyz2grd $TEMPDIR/tempDispl.xyz -V -R$REGION -I$GLOBALGRIDRESOLUTION -G$TEMPDIR/displ.nc -N0."
+  CMD="$GMTPREFIX xyz2grd $TEMPDIR/tempDispl.xyz -V -R$REGION_WORK -I$GLOBALGRIDRESOLUTION -G$TEMPDIR/displ.nc -N0."
   echo "$CMD"
   $CMD
 
